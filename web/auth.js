@@ -1,5 +1,5 @@
 // --- NEW: Define Backend URL ---
-const BACKEND_URL = ''; // Use relative path
+const BACKEND_URL = 'https://backend1-vlbd.onrender.com'; // Use relative path
 
 document.addEventListener("DOMContentLoaded", () => {
     handleAutoLogin(); // Runs automatically
@@ -164,5 +164,6 @@ async function signupUser() {
     }
 
 }
+
 
 
