@@ -11,12 +11,10 @@
       "src": "/api/(.*)",
       "dest": "api/main.py"
     },
-    // IMPORTANT: Add a specific route for the root (/) path
     {
       "src": "/",
       "dest": "web/index.html"
     },
-    // This route handles all other static files like /login.html, /style.css, etc.
     {
       "src": "/(.*)",
       "dest": "web/$1"
