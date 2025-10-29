@@ -24,48 +24,39 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function handleAutoLogin() {
-    const savedUser = localStorage.getItem("luvisa_user");
-    if (!savedUser) {
-        setRandomBackground(); // Set background only if not auto-logging in
-        return;
+  const email = localStorage.getItem('email');
+  const token = localStorage.getItem('token'); // ✅ get token
+
+  if (!email || !token) {
+    console.log("Missing email or token");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/auto_login_check`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` // ✅ include token
+      },
+      body: JSON.stringify({ email })
+    });
+
+    const result = await response.json();
+    console.log(result);
+
+    if (result.success) {
+      console.log("Auto-login success!");
+      // Redirect or load dashboard
+    } else {
+      console.log("Auto-login failed:", result.message);
     }
 
-    // Show "Logging in" message
-    const authContainer = document.querySelector(".auth-container");
-    if (authContainer) {
-        authContainer.innerHTML = `
-            <div class="auto-login-view">
-                <img src="luvisa.png" alt="Luvisa" class="luvisa-logo">
-                <h2>Welcome Back!</h2>
-                <p>Logging you in securely...</p>
-                <div class="spinner"></div>
-            </div>
-        `;
-    }
-
-    try {
-        // --- UPDATED: Use fetch with relative URL ---
-        const response = await fetch(`${BACKEND_URL}/api/auto_login_check`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: savedUser })
-        });
-        const data = await response.json();
-
-        if (response.ok && data.isValid) {
-            window.location.href = "/chat"; // Go to /chat route
-        } else {
-            console.warn("Auto-login failed:", data.message || 'User not valid');
-            localStorage.removeItem("luvisa_user");
-            window.location.reload(); // Show login form
-        }
-    } catch (error) {
-        console.error("Auto-login check error:", error);
-        localStorage.removeItem("luvisa_user");
-        alert("Could not verify login. Please log in manually.");
-        window.location.reload(); // Show login form
-    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
+
 
 function setRandomBackground() {
     const backgrounds = [
@@ -164,6 +155,7 @@ async function signupUser() {
     }
 
 }
+
 
 
 
