@@ -13,11 +13,15 @@
     },
     {
       "src": "/",
-      "dest": "web/index.html"
+      "dest": "web/login.html"
     },
     {
-      "src": "/(.*)",
+      "src": "/(.*\\.(html|css|js|png|mp3|ico|svg|jpg|jpeg|gif))",
       "dest": "web/$1"
+    },
+    {
+      "src": "/(?!api)(.*)",
+      "dest": "web/index.html"
     }
   ],
   "github": {
